@@ -1,0 +1,331 @@
+<html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style>
+            {{ fontface "Roboto" "roboto/Roboto-Bold.ttf" }}
+            {{ fontface "Roboto-Light" "roboto/Roboto-Regular.ttf" }}
+            /* set ouput image to same size than e-ink screen size */
+            body {
+              width: 1200px; /* 1200 */
+              height: 825px; /* 825 */
+              margin:0;
+              padding:0;
+              background-color:#555;
+              font-family: Roboto;
+            }
+            #container {
+              background-color:#fff;
+              width: 1200px;
+              height: 825px;
+              overflow: hidden;
+
+              display: flex;
+              flex-direction:column;
+              justify-content: space-between;
+            }
+            
+            .top {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding-left:15px;
+            }
+            .weekDay {
+              text-align: center;
+              width:100%;
+              font-size:20px;
+              padding-bottom:5px;
+              padding-top:5px;
+              margin-right:15px;
+            }
+            .weekDay.we {
+              background-color:#ddd;
+            }
+            .week {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding-left:15px;
+            }
+            .day {
+              border:2px solid #000;
+              width:100%;
+              height:150px;
+              margin-right:15px;
+              margin-bottom:15px;
+              padding:6px 10px;
+              font-family: Roboto;
+              text-align:center;
+
+              display:flex;
+              flex-direction: column;
+              justify-content: space-between;
+              background-color:#fff;
+              background-repeat: no-repeat;
+              background-position: 50% 50%;
+              background-size: 100px 100px;
+            }
+            .day .d {
+              font-size:20px;
+              color:#888;
+            }
+            .day.past {
+              background: repeating-linear-gradient(
+                -45deg,
+                #ddd,
+                #ddd 10px,
+                #ffffff 10px,
+                #ffffff 20px
+              );
+            }
+            .day.today {
+              background-color: #000;
+              color:#fff;
+              border-width:4px;
+              padding:4px 8px;
+            }
+            .day.today .d {
+              color:#fff;
+            }
+            .day .temp {
+              position: relative;
+              font-size: 30px;
+              text-align: center;
+              padding-top: 5px;
+              margin-left: -8px;
+              margin-right: -8px;
+            }
+            .day .temp img {
+              margin-top:-15px;
+            }
+            .day .temp .pop {
+              position: absolute;
+              display:block;
+              padding-right:10px;
+              font-size: 15px;
+              text-align: center;
+              margin-top:52px;
+              width:100%;
+              text-align:right;
+              left:-5px;
+            }
+            .day .details {
+              font-size: 15px;
+              text-align: center;
+              margin-bottom:-67px;
+              height:16px;
+              overflow-y: hidden;
+              text-overflow: ellipsis;
+              background-color: #fff;
+            }
+            .day .quote {
+              font-size:30px;
+              padding-top:10px;
+              text-align: center;
+              overflow:hidden;
+            }
+
+
+            #today {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding-left:15px;
+              padding-top:15px;
+            }
+            .t {
+              border:4px solid #000;
+              width:33%;
+              margin-right:20px;
+            }
+            .t .title {
+              background-color:#ddd;
+              padding:20px;
+              font-size: 25px;
+              text-transform: uppercase;
+            }
+            .t .content {
+              display:flex;
+              flex-direction: row;
+              justify-content: center;
+              margin-left:20px;
+              margin-right:20px;
+            }
+            .t img {
+              flex:1;
+            }
+            .t .temp {
+              flex:1;
+              /* today temp */
+              align-self: center;
+              width:120px;
+              overflow: visible;
+              text-align: center;
+              transform: translateX(0); /* hack to get this element to go above the img */
+            }
+            .t .temp .number {
+              font-size: 110px;
+              font-family: 'Roboto-Light';
+              letter-spacing: -3px;
+            }
+            .t .temp .deg {
+              font-size: 50px;
+              font-family: 'Roboto-Light';
+              vertical-align: top;
+              line-height: 85px;
+            }
+            .time {
+              width:33%;
+              margin-right:20px;
+            }
+            .time .weekDay {
+              font-size:30px;
+              font-family: 'Roboto-Light';
+              font-weight: bold;
+              text-align: center;
+              margin-top:20px;
+            }
+            .time .date {
+              font-size:40px;
+              font-family: 'Roboto';
+              text-align: center;
+              margin-top:15px;
+              
+            }
+            .time .d {
+              font-size:90px;
+              font-family: 'Roboto-Light';
+              text-align: center;
+              margin-top:15px;
+              font-weight: bold;
+              display:block;
+            }
+
+            .extra {
+              padding-left:15px;
+              font-size:28px;
+            }
+          </style>
+    </head>
+    <body>
+      <div id="container">
+        
+        <div id="row1">
+
+          {{#with today}}
+          <div id="today">
+              <div class="t am">
+                <div class="title">Ce matin</div>
+                <div class="content">
+                  {{#with am}}
+                    <span class="temp"><span class="number">{{ temp }}</span><span class="deg">°</span></span>
+                    <img src="{{ icon icon }}" width="200" />
+                  {{/with}}
+                </div>
+              </div>
+              <div class="t pm">
+                <div class="title">Cet après-midi</div>
+                <div class="content">
+                  {{#with pm}}
+                    <span class="temp"><span class="number">{{ temp }}</span><span class="deg">°</span></span>
+                    <img src="{{ icon icon }}" width="200" />
+                  {{/with}}
+                </div>
+              </div>
+
+            <div class="time">
+              <div class="weekDay">{{ weekDayLong weekDay }}</div>
+              <div class="date"><span class="d">{{ date.day }}</span><span>{{ monthLong date.month }}</span></div>
+            </div>
+          </div>
+          {{/with}}
+
+        </div>
+
+        {{#with today.weather}}
+          <div id="row2" class="extra">
+            {{ display_rain rain }}
+            {{ display_snow snow }}
+            {{ display_pop pop }}
+            {{ display_uvi uvi }}
+          </div>
+        {{/with}}
+
+        <div id="row3">
+          
+          {{#each weeks}}
+
+            <div class="top">
+              {{#each ../weekDays}}
+                <div class="weekDay {{#if weekend }}we{{/if}}">{{ weekDayInitial weekDay }}</div>
+              {{/each}}
+            </div>
+            
+            <div class="week">
+              {{#each this}}
+                <div class="day {{#if past}}past{{/if}} {{#if today}}today{{/if}}"{{#if future }}{{#if weather}}style="background-image:url('{{ icon weather.icon }}')"{{/if}}{{/if}}>
+                  {{#if past }}
+                  <div style="height:40px">&nbsp;</div>
+                  {{/if}}
+                
+                  {{#if today}}
+                    {{#if events}}
+                      <div class="quote">
+                        {{#each events}}
+                          <span>{{ title }}</span>
+                        {{/each}}
+                      </div>
+                    {{/if}}
+                    {{#unless events}}
+                      <div class="quote">{{ ../../todayQuote }}</div>
+                    {{/unless}}
+                  {{/if}}
+                  {{#if future}}
+                    {{#with weather}}
+                    <div class="temp">
+                      <span class="minmax">
+                        <span style="float:left;margin-left:10px;width:40%;text-align:center;">{{ max }}°</span>
+                        <span style="float:right;margin-right:10px;width:40%;text-align:center;">{{ min }}°</span>
+                      </span>
+                      
+                      <span class="pop">
+                        {{#if rain}}
+                          {{ display_rain rain }}<br />
+                        {{/if}}
+                        {{#if snow }}
+                          {{ display_snow snow }}<br />
+                        {{/if}}
+                        {{#if pop }}
+                          {{ display_pop pop }}
+                        {{/if}}
+                      </span>
+                    </div>
+                    {{/with}}
+                    {{#unless weather}}
+                    <div style="height:40px">&nbsp;</div>
+                    {{/unless}}
+                  {{/if}}
+                  {{#unless today}}
+                  {{#if events}}
+                  <span class="details">
+                    {{#each events}}
+                      {{ title }}
+                    {{/each}}
+                  </span>
+                  {{/if}}
+                  {{/unless}}
+                  <span class="d">
+                    {{ date.day }}
+                    {{#isFirst date.day }}
+                      {{ monthLong date.month }}
+                    {{/isFirst}}
+                  </span>
+                </div>
+              {{/each}}
+            </div>
+          {{/each}}
+        </div>
+
+      </div>
+    </body>
+</html>
