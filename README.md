@@ -32,8 +32,8 @@ Code for family dashboard. Always-on 10 inch e-ink screen, updated daily.
 - Generate the dashboard image on a schedule. Serve this image to the client device when requested.
 - Server code is in server/ folder.
 - It is a basic node.js application.
-- The weather is fetched from an api. openweather and pirateweather are supported. See server/accessors/*weather
-- The events data is fetched from an iCal url. See server/accessor/ical
+- The weather is fetched from the pirateweather api. See server/accessors/pirateweather.js
+- The events data is fetched from an iCal url. See server/accessors/ical.js
 - The dashboard image is generated using an html template. See server/accessors/template
 
 ## Development
