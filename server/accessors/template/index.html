@@ -385,6 +385,17 @@ var width = 1200,
 
 // get the data
 var data = {{ json hourly }};
+var amHour = null;
+var pmHour = null;
+
+{{#with today}}
+{{#with am}}
+amHour = {{ hour }};
+{{/with}}
+{{#with pm}}
+pmHour = {{ hour }};
+{{/with}}
+{{/with}}
 
 var tempChart = AreaChart(data, {
   x: d => d.hour,
@@ -480,7 +491,7 @@ function AreaChart(data, {
       .attr("d", area(I));
 
   // draw dots and legends at 8:00 and 14:00
-  var bigHours = I.filter((_, i) => X[i] === 8 || X[i] === 14);
+  var bigHours = I.filter((_, i) => X[i] === amHour || X[i] === pmHour);
   svg.selectAll('circle')
     .data(bigHours)
     .join('circle')
@@ -498,7 +509,7 @@ function AreaChart(data, {
       .attr('class', 'legend')
       .attr("x", i => xScale(X[i]))
       .attr("y", marginTop + 15)
-      .text(i => X[i] == 8 ? 'AM' : 'PM'); // `${X[i]}h`
+      .text(i => X[i] == amHour ? 'AM' : 'PM'); // `${X[i]}h`
 
 	// x axis
   svg.append("g")

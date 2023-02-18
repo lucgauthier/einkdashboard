@@ -3,9 +3,10 @@ const http = require('http');
 const path = require('path');
 var cron = require('node-cron');
 var logger = require('./utils/logger');
+var config = require('./utils/config');
 
-const serverHttpPort = 8080;
 const dashboardManager = require('./managers/dashboard');
+const serverHttpPort = config.PORT;
 
 // 1. Generate dashboard automatically: 21:45 to 7:45
 //cron.schedule('0 0 21 * * *', async () => {
@@ -74,7 +75,13 @@ process.on('SIGTERM', function() {
   logger.info('Exiting process.');
   process.exit(1);
 });
+var sigintAlreadyReceived = false;
 process.on('SIGINT', function() {
+  if (sigintAlreadyReceived) {
+    logger.info('SIGINT received twice. Exiting process.');
+    process.exit(1);
+  }
+  sigintAlreadyReceived = true;
   logger.info('SIGINT received. Closing server.');
   server.close(() => {
     logger.info('Exiting process.');

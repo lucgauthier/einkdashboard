@@ -8,12 +8,10 @@ Code for family dashboard. Always-on 10 inch e-ink screen, updated daily.
 
 - Inkplate 10
 - Docker server, network accessible from Inkplate device
-- OpenWeather API key (free tier is enough) or PirateWeather API key (weather was more accurate for me)
+- PirateWeather API key
 
 ## Useful Links
 
-- [OpenWeather login](https://home.openweathermap.org/myservices)
-- [OpenWeather One Call API](https://openweathermap.org/api/one-call-3)
 - [Pirate Weather Doc](http://docs.pirateweather.net/en/latest/)
 - [Inkplate](https://inkplate.readthedocs.io/en/latest/)
 - [Inkplate Arduino Setup](https://github.com/SolderedElectronics/Inkplate-Arduino-library#setting-up-inkplate-in-arduino-ide)
@@ -54,16 +52,14 @@ Dependencies:
 Environment variables:
 
 ```
-OPENWEATHER_APIKEY=****
 PIRATEWEATHER_APIKEY=***
 WEATHER_CACHE_DURATION_MINUTES=120
-WEATHER_BYPASS_TODAY_CHECK=true
 WEATHER_AM_HOUR=8
 WEATHER_PM_HOUR=14
 LAT=***
 LON=***
-TODAY_QUOTE=Today!
 ICAL_URL=https://p35-caldav.icloud.com/published/2/***
+PORT=8080
 ```
 
 Put those values in .ENV file to configure your server.

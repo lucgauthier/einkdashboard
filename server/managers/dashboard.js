@@ -7,7 +7,6 @@ const {
 const { 
     calendarAccessor, 
     icalAccessor,
-    openweatherAccessor,
     pirateweatherAccessor,
     templateAccessor,
 } = require('../accessors');

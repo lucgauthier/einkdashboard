@@ -82,6 +82,7 @@ async function getWeather(date, coord) {
             pop: amResult.precipProbability,
             rain: amResult.precipType == "rain" ? amResult.precipAccumulation * 10 : null, // mm
             snow: amResult.precipType == "snow" ? amResult.precipAccumulation * 10 : null, // mm
+            hour: config.WEATHER_AM_HOUR
         }
     }
 
@@ -92,6 +93,7 @@ async function getWeather(date, coord) {
             pop: pmResult.precipProbability,
             rain: pmResult.precipType == "rain" ? pmResult.precipAccumulation * 10 : null, // mm 
             snow: pmResult.precipType == "snow" ? pmResult.precipAccumulation * 10 : null, // mm
+            hour: config.WEATHER_PM_HOUR
         }
     }
 
