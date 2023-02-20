@@ -107,7 +107,8 @@ async function getWeather(date, coord) {
         return {
             hour: hourDate.hours || 24, // change 0 to 24
             temp: Math.round(hourly.temperature),
-            precip: pmResult.precipProbability >= 0.4 ? hourly.precipAccumulation * 10 : 0
+            precip: hourly.precipAccumulation * 10 || 0,
+            pop: pmResult.precipProbability
         };
     });
 

@@ -113,6 +113,7 @@
             }
             .day .details {
               font-size: 15px;
+              line-height: 1;
               text-align: center;
               margin-bottom:-67px;
               height:16px;
@@ -407,7 +408,7 @@ var tempChart = AreaChart(data, {
 
 var precipChart = BarChart(data, {
   x: d => d.hour,
-  y: d => d.precip,
+  y: d => d.pop >= 0.4 ? d.precip : 0,
   width: width,
   height: height,
   color: "black",
@@ -495,7 +496,7 @@ function AreaChart(data, {
   svg.selectAll('circle')
     .data(bigHours)
     .join('circle')
-      .attr("r", 7)
+      .attr("r", i => (yScale(Y[i]) > marginTop + 15 + 4) ? 7 : 0) // Don't display dot if it overlap with AM/PM text
       .attr("cx", i => xScale(X[i]))
       .attr("cy", i => yScale(Y[i]))
       .style("fill", "black")
