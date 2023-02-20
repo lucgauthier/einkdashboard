@@ -78,11 +78,11 @@ process.on('SIGTERM', function() {
 var sigintAlreadyReceived = false;
 process.on('SIGINT', function() {
   if (sigintAlreadyReceived) {
-    logger.info('SIGINT received twice. Exiting process.');
+    logger.info('SIGINT received twice. Exiting process now.');
     process.exit(1);
   }
   sigintAlreadyReceived = true;
-  logger.info('SIGINT received. Closing server.');
+  logger.info('SIGINT received. Closing server gracefully.');
   server.close(() => {
     logger.info('Exiting process.');
     process.exit(0);
