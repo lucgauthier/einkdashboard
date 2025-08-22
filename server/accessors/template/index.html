@@ -510,7 +510,7 @@ function AreaChart(data, {
       .attr('class', 'legend')
       .attr("x", i => xScale(X[i]))
       .attr("y", marginTop + 15)
-      .text(i => X[i] == amHour ? 'AM' : 'PM'); // `${X[i]}h`
+      .text(i => `${X[i]}h`); // `${X[i]}h` ... X[i] == amHour ? 'AM' : 'PM'
 
 	// x axis
   svg.append("g")
