@@ -112,9 +112,8 @@ bool downloadAndDisplayImage(String url) {
         log("display.drawBitmapFromWeb success");
         success = true;
       } else {
-        // If is something failed (wrong filename or wrong bitmap format), write error message on the screen.
-        // REMEMBER! You can only use Windows Bitmap file with color depth of 1, 4, 8 or 24 bits with no
-        // compression!
+        // If something failed (wrong filename or wrong bitmap format), write error message on the screen.
+        // Only use Windows Bitmap file with color depth of 1, 4, 8 or 24 bits with no compression!
         log("display.drawBitmapFromWeb failure");
       }
     } else {
