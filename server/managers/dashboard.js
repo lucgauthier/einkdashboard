@@ -71,6 +71,6 @@ async function getTemplateData(calendarAccessor, weatherAccessor, icalAccessor) 
 // After 8 AM, return tomorrow. Otherwise, return today.
 function getDashboardDate() {
     const date = datetime.jsDateToDate(new Date());
-    return date.hours < 8 ? date : datetime.addDays(date, 1);
+    return date.hours < 9 ? date : datetime.addDays(date, 1);
     //return date;
 }
