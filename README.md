@@ -74,6 +74,36 @@ Now, you can make changes to the template and see the result in a browser at [ht
 
 I used NSSM to host the node app as a windows service on my home server box.
 
+#### Running server with Docker
+
+From the project root, build the Docker image with:
+
+```powershell
+docker build -t your-image-name ./server
+```
+
+Replace `your-image-name` with a name you choose for your image.
+
+To run the server in Docker with proper environment variables (since `.env` is not included in the image) and map a local folder to the container's output directory, use the following command (replace the local path as needed):
+
+```powershell
+docker run \
+	-v C:\my\local\output:/usr/src/app/output \
+	-p 8080:8080 \
+	-e PIRATEWEATHER_APIKEY=your_api_key \
+	-e WEATHER_CACHE_DURATION_MINUTES=120 \
+	-e WEATHER_AM_HOUR=8 \
+	-e WEATHER_PM_HOUR=14 \
+	-e LAT=your_latitude \
+	-e LON=your_longitude \
+	-e ICAL_URL=https://your.ical.url \
+	your-image-name
+```
+
+Replace the values as needed for your environment.
+
+This will map your local `C:\my\local\output` folder to the container's `/usr/src/app/output` directory, allowing you to access generated files on your host machine for easier troubleshooting or archiving needs.
+
 ## Troubleshooting
 
 ### Arduino IDE

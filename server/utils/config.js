@@ -19,5 +19,5 @@ module.exports = {
     LAT: process.env.LAT || 46.85,
     LON: process.env.LON || -71.38,
     ICAL_URL: process.env.ICAL_URL || null,
-    PORT: process.env.PORT || 8080,
+    PORT: 8080,
 };
