@@ -53,9 +53,15 @@ handlebars.registerHelper('isFirst', function(day, options) {
 });
 handlebars.registerHelper('icon', function(icon) {
     const localPath = path.join(__dirname, `icons-${icon.set}`, `${icon.ref}.png`);
-    const image = fs.readFileSync(localPath);
-    const base64Image = new Buffer.from(image).toString('base64');
-    return `data:image/png;base64,${base64Image}`
+    if (fs.existsSync(localPath)) {
+        const image = fs.readFileSync(localPath);
+        const base64Image = new Buffer.from(image).toString('base64');
+        return `data:image/png;base64,${base64Image}`
+    }
+    else {
+        return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    }
+    
 });
 handlebars.registerHelper('display_rain', function(rain) {
     if (rain) {
