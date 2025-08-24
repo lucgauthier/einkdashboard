@@ -1,27 +1,18 @@
 const static = require('node-static');
 const http = require('http');
 const path = require('path');
-var cron = require('node-cron');
 var logger = require('./utils/logger');
 var config = require('./utils/config');
+
+const { 
+    settingsAccessor
+} = require('./accessors');
 
 const dashboardManager = require('./managers/dashboard');
 const serverHttpPort = config.PORT;
 
 // 1. Generate dashboard automatically: 21:45 to 7:45
-//cron.schedule('0 0 21 * * *', async () => {
-cron.schedule('0 45 0-7,21-23 * * *', async () => {
-  logger.info('Job run started', new Date().toLocaleString());
-
-  await dashboardManager.generatePage();
-  await dashboardManager.generateImage();
-
-  logger.info('Job run completed', new Date().toLocaleString());
-}, {
-  name: 'Daily dashboard generation',
-  runOnInit: false, 
-  timezone: 'America/Toronto'
-});
+dashboardManager.scheduleGeneration();
 
 // 2. Serve dashboard files
 // live: /image.bmp is accessed by networked dashboard
@@ -30,34 +21,59 @@ cron.schedule('0 45 0-7,21-23 * * *', async () => {
 // debug: /generateImage to generate fresh /image.bmp
 // debug: /generateAll to generate fresh page and image
 
-const outputDirectory = path.resolve(__dirname, 'output');
-
-const file = new(static.Server)(outputDirectory, { cache: 0 }); // 3600 = 1 hour
-
 // cached image can be accessed to /image.png
 // cached page can be accessed to /index.html
+
+const tokenKeys = settingsAccessor.getDashboardSettingsMap();
+const defaultToken = "default";
+const hasDefaultToken = !!tokenKeys[defaultToken];
+
 const server = http.createServer(async function (req, res) {
+  // grab token from querystring
+  let token = req.url.split('?')[1]?.split('=')[1] || null;
+  if (!token) {
+    if (hasDefaultToken) {
+      token = defaultToken;
+    }
+    else {
+      res.writeHead(400, { 'Content-Type': 'text/plain' });
+      res.end('Token is required in query string');
+      return;
+    }
+  }
+  
+  if (!tokenKeys[token]) {
+    res.writeHead(403, { 'Content-Type': 'text/plain' });
+    res.end('Token is not valid');
+    return;
+  }
+
+  const key = tokenKeys[token];
+
+  const outputDirectory = path.resolve(__dirname, 'data', 'dashboards', key, 'output');
+  const file = new(static.Server)(outputDirectory, { cache: 0 }); // 3600 = 1 hour
+
   // Make sure the dashboard is properly generated when /dashboard endpoint is called
-  if (req.url == '/generatePage') {
-    await dashboardManager.generatePage();
+  if (req.url.startsWith('/generatePage')) {
+    await dashboardManager.generatePage(key);
     req.url = '/';
   }
 
-  if (req.url == '/generateImage') {
-    await dashboardManager.generateImage();
+  if (req.url.startsWith('/generateImage')) {
+    await dashboardManager.generateImage(key);
     req.url = '/image.bmp';
   }
 
-  if (req.url == '/generateAll') {
-    await dashboardManager.generatePage();
-    await dashboardManager.generateImage();
+  if (req.url.startsWith('/generateAll')) {
+    await dashboardManager.generatePage(key);
+    await dashboardManager.generateImage(key);
     req.url = '/';
   }
 
-  if (req.url == '/device') {
+  if (req.url.startsWith('/device')) {
     // return sleep time to next update
     //logger.info('Received from device', req.da);
-    const seconds = dashboardManager.getSleepTime();
+    const seconds = dashboardManager.getSleepTime(key);
     logger.info('<--- %s %d', req.url, seconds);
     res.end('' + seconds);
   }

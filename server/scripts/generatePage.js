@@ -1,3 +1,7 @@
 const dashboard = require('../managers/dashboard')
 
-dashboard.generatePage();
+try {
+    dashboard.generatePage("default");
+} catch (error) {
+    console.error("Error generating page:", error);
+}

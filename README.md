@@ -54,15 +54,28 @@ Environment variables:
 ```
 PIRATEWEATHER_APIKEY=***
 WEATHER_CACHE_DURATION_MINUTES=120
-WEATHER_AM_HOUR=8
-WEATHER_PM_HOUR=14
-LAT=***
-LON=***
-ICAL_URL=https://p35-caldav.icloud.com/published/2/***
 PORT=8080
 ```
 
 Put those values in .ENV file to configure your server.
+
+Then, we can manager more than one dashboard generation. Each dashboard has it's on folder in /data/dashboards/. Name the folder the way you want, than add 1- an empty output folder for the generated dashboard, and 2- a `settings.json` file like this:
+
+```json
+{
+    "description": "internal description here. not displayed anywhere",
+    "token": "xyz", // token is sent by client. Allow the client to fetch the appropriate dashboard.
+    "cron": "0 45 0-7,21-23 * * *", // when to generate dashboard
+    "timezone": "America/Toronto", // used by the cron scheduler
+    "eink_sleep_until": 7, // put 7 so the eink display will sleep until 7 am
+    "nextday_cutoff": 8, // put 8 so any generation after 8:59 will generate the next day
+    "ical_url": "https://p35-caldav.icloud.com/published/2/...redacted...", // ical url where to fetch all day events to display on dashboard
+    "lat": 46.85, // weather forecast location
+    "lon": -71.38, // weather forecast location
+    "weather_am": 8, // dashboard display 2 temps for the day, first hour to display here. Put 8 for 8 am
+    "weather_pm": 14 // dashboard display 2 temps for the day, second hour to display here. Put 14 for 2 pm
+}
+```
 
 ```bash
 cd server
@@ -72,7 +85,7 @@ node .
 
 Now, you can make changes to the template and see the result in a browser at [http://localhost:8080/generatePage](http://localhost:8080/generatePage).
 
-I used NSSM to host the node app as a windows service on my home server box.
+I used NSSM to host the node app as a windows service on my home server box. Now I use Docker to run the service on a Ubuntu VM.
 
 #### Running server with Docker
 
@@ -88,15 +101,10 @@ To run the server in Docker with proper environment variables (since `.env` is n
 
 ```powershell
 docker run \
-	-v C:\my\local\output:/usr/src/app/output \
+	-v "C:\my\local\dashboardServer:/usr/src/app/data" \
 	-p 8080:8080 \
 	-e PIRATEWEATHER_APIKEY=your_api_key \
-	-e WEATHER_CACHE_DURATION_MINUTES=120 \
-	-e WEATHER_AM_HOUR=8 \
-	-e WEATHER_PM_HOUR=14 \
-	-e LAT=your_latitude \
-	-e LON=your_longitude \
-	-e ICAL_URL=https://your.ical.url \
+	--restart=always \
 	your-image-name
 ```
 

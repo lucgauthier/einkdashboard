@@ -9,7 +9,6 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-
 # Install Chromium dependencies for Puppeteer
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \

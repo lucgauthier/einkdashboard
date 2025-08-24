@@ -13,11 +13,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = {
     PIRATEWEATHER_APIKEY: process.env.PIRATEWEATHER_APIKEY,
-    WEATHER_AM_HOUR: parseInt(process.env.WEATHER_AM_HOUR || 8),
-    WEATHER_PM_HOUR: parseInt(process.env.WEATHER_PM_HOUR || 14),
     WEATHER_CACHE_DURATION_MINUTES: process.env.WEATHER_CACHE_DURATION_MINUTES || 120,
-    LAT: process.env.LAT || 46.85,
-    LON: process.env.LON || -71.38,
-    ICAL_URL: process.env.ICAL_URL || null,
-    PORT: 8080,
+    PORT: process.env.PORT || 8080,
 };

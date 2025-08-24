@@ -1,3 +1,3 @@
 const dashboard = require('../managers/dashboard')
 
-dashboard.generateImage();
+dashboard.generateImage("default");

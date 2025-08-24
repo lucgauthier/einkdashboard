@@ -5,8 +5,6 @@ const config = require('../utils/config');
 var logger = require('../utils/logger');
 
 const apiCacheDurationMs = config.WEATHER_CACHE_DURATION_MINUTES * 1000 * 60;
-const amHour = config.WEATHER_AM_HOUR;
-const pmHour = config.WEATHER_PM_HOUR;
 const apiKey = config.PIRATEWEATHER_APIKEY;
 
 async function getApiResult(date, coord) {
@@ -51,7 +49,7 @@ function convertDailyWeather(daily) {
     };
 }
 
-async function getWeather(date, coord) {
+async function getWeather(date, coord, amHour, pmHour) {
     const result = await getApiResult(date, coord);
     
     const weather = {
@@ -82,7 +80,7 @@ async function getWeather(date, coord) {
             pop: amResult.precipProbability,
             rain: amResult.precipType == "rain" ? amResult.precipAccumulation * 10 : null, // mm
             snow: amResult.precipType == "snow" ? amResult.precipAccumulation * 10 : null, // mm
-            hour: config.WEATHER_AM_HOUR
+            hour: amHour
         }
     }
 
@@ -93,7 +91,7 @@ async function getWeather(date, coord) {
             pop: pmResult.precipProbability,
             rain: pmResult.precipType == "rain" ? pmResult.precipAccumulation * 10 : null, // mm 
             snow: pmResult.precipType == "snow" ? pmResult.precipAccumulation * 10 : null, // mm
-            hour: config.WEATHER_PM_HOUR
+            hour: pmHour
         }
     }
 
@@ -108,7 +106,7 @@ async function getWeather(date, coord) {
             hour: hourDate.hours || 24, // change 0 to 24
             temp: Math.round(hourly.temperature),
             precip: hourly.precipAccumulation * 10 || 0,
-            pop: pmResult.precipProbability
+            pop: hourly.precipProbability
         };
     });
 

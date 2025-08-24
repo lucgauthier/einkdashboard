@@ -9,10 +9,11 @@
 // wifi AP client setup
 const char ssid[] = "***";
 const char* password = "***";
+const String token = "***"; // see configured dashboards in server data for valid token
 
 // image download url
-const String imageUrl = "http://10.0.1.128:8080/image.bmp";
-const String sleepTimeUrl = "http://10.0.1.128:8080/device";
+const String imageUrl = "http://10.0.1.128:8080/image.bmp?token=" + token;
+const String sleepTimeUrl = "http://10.0.1.128:8080/device?token=" + token;
 
 // Create object on Inkplate library and set library to work in gray mode (3-bit)
 Inkplate display(INKPLATE_3BIT);
