@@ -4,6 +4,7 @@ const {
     config,
     datetime,
     htmlTemplate,
+    logger,
 } = require('../utils');
 
 const { 
@@ -51,6 +52,8 @@ module.exports = {
         const dashboards = settingsAccessor.getDashboardSettingsMap();
         Object.entries(dashboards).forEach(settings => {
             const key = settings[1];
+            logger.info(`${key}: Scheduling dashboard generation`);
+            
             const dashboardSettings = settingsAccessor.getDashboardSettings(key);
             if (!dashboardSettings) {
                 console.warn(`Dashboard settings for key "${key}" not valid. Skipping.`);
