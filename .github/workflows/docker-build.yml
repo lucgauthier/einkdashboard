@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build ./server --file Dockerfile --tag dashboard-server:$(date +%s)
+      run: docker build ./server -t dashboard-server:$(date +%s)
