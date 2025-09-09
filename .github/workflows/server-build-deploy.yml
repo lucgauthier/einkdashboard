@@ -1,19 +1,14 @@
-name: Docker Image CI
+name: Server Build & Deploy
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
 
-  build:
-
+  build_deploy:
     runs-on: self-hosted
-
     steps:
-    
     - name: Checkout code
       uses: actions/checkout@v4
       
