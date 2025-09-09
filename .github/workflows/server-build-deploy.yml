@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Build
+      run: docker build ./server -t dashboard-server:latest
+      
+    - name: Deploy
+      run: cd /opt/dashboard-server && docker compose up -d --force-recreate dashboard-server
