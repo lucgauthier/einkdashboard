@@ -1,19 +1,23 @@
-#ifndef ARDUINO_INKPLATE10
-#error "Wrong board selection for this example, please select Inkplate 10 in the boards menu."
+#if !defined(ARDUINO_INKPLATE10) && !defined(ARDUINO_INKPLATE10V2)
+#error "Wrong board selection for this example, please select e-radionica Inkplate10 or Soldered Inkplate10 in the boards menu."
 #endif
 
 #include "HTTPClient.h"
 #include "Inkplate.h"
 #include "WiFi.h"
 
-// wifi AP client setup
+// wifi AP client config
 const char ssid[] = "***";
 const char* password = "***";
-const String token = "***"; // see configured dashboards in server data for valid token
+
+// target server config
+const String baseurl = "http://***";
+const String token = "***";
 
 // image download url
-const String imageUrl = "http://10.0.1.128:8080/image.bmp?token=" + token;
-const String sleepTimeUrl = "http://10.0.1.128:8080/device?token=" + token;
+const String qs = "?token=" + token;
+const String imageUrl = baseurl + "/image.bmp" + qs;
+const String sleepTimeUrl = baseurl + "/device" + qs;
 
 // Create object on Inkplate library and set library to work in gray mode (3-bit)
 Inkplate display(INKPLATE_3BIT);
