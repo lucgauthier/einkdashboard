@@ -44,8 +44,8 @@ Arduino IDE.
 
 Dependencies:
 
-- Inkplate arduino libraries.
-- Inkplate board definition.
+- Inkplate arduino libraries `6.0.0`
+- Inkplate board definition `e-radionica.com Inkplate10`
 
 ### Server
 
