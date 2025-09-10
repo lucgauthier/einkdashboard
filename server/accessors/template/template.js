@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const handlebars = require('handlebars');
 const font2base64 = require('node-font2base64');
+const logger = require('../../utils/logger')
 
 // Define template helper functions
 handlebars.registerHelper('loud', function(str) {
@@ -59,6 +60,7 @@ handlebars.registerHelper('icon', function(icon) {
         return `data:image/png;base64,${base64Image}`
     }
     else {
+        logger.warn("icon not found", icon.set, icon.ref)
         return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     }
     
