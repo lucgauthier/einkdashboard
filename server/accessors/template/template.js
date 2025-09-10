@@ -60,7 +60,7 @@ handlebars.registerHelper('icon', function(icon) {
         return `data:image/png;base64,${base64Image}`
     }
     else {
-        logger.warn("icon not found", icon.set, icon.ref)
+        logger.warn("icon not found: " + JSON.stringify(icon))
         return 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     }
     
