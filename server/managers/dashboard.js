@@ -39,8 +39,6 @@ const generatePage = async function(key) {
     const outputHtmlPath = `./data/dashboards/${key}/output/index.html`;
     const templateData = await getTemplateData(calendarAccessor, pirateweatherAccessor, icalAccessor, settings);
     const compiledTemplate = await templateAccessor.getCompiledTemplate(templateData);
-    logger.info(JSON.stringify(templateData));
-
     await htmlTemplate.ToHtmlFile(compiledTemplate, templateData, outputHtmlPath);
 };
 
