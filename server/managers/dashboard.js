@@ -25,7 +25,6 @@ const generateImage = async function(key) {
 
     const templateData = await getTemplateData(calendarAccessor, pirateweatherAccessor, icalAccessor, settings);
     const html = await templateAccessor.getTemplate();
-
     const outputBmpImagePath = `./data/dashboards/${key}/output/image.bmp`;
     await htmlTemplate.ToBmpFile(html, templateData, outputBmpImagePath);
 };
@@ -40,6 +39,7 @@ const generatePage = async function(key) {
     const outputHtmlPath = `./data/dashboards/${key}/output/index.html`;
     const templateData = await getTemplateData(calendarAccessor, pirateweatherAccessor, icalAccessor, settings);
     const compiledTemplate = await templateAccessor.getCompiledTemplate(templateData);
+    logger.info(JSON.stringify(templateData));
 
     await htmlTemplate.ToHtmlFile(compiledTemplate, templateData, outputHtmlPath);
 };
