@@ -39,8 +39,6 @@ const generatePage = async function(key) {
     const outputHtmlPath = `./data/dashboards/${key}/output/index.html`;
     const templateData = await getTemplateData(calendarAccessor, pirateweatherAccessor, icalAccessor, settings);
     const compiledTemplate = await templateAccessor.getCompiledTemplate(templateData);
-    logger.info(JSON.stringify(templateData));
-
     await htmlTemplate.ToHtmlFile(compiledTemplate, templateData, outputHtmlPath);
 };
 
@@ -63,12 +61,12 @@ module.exports = {
             const timezone = dashboardSettings.timezone || 'America/Toronto'; // Default timezone
 
             cron.schedule(cronTime, async () => {
-                logger.info('Job run started', new Date().toLocaleString());
+                logger.info('Job run started ' + new Date().toLocaleString());
 
                 await generatePage(key);
                 await generateImage(key);
 
-                logger.info('Job run completed', new Date().toLocaleString());
+                logger.info('Job run completed ' + new Date().toLocaleString());
             }, {
                 name: 'Daily dashboard generation for ' + key,
                 runOnInit: true, 
