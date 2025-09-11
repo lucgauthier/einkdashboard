@@ -61,6 +61,11 @@ const server = http.createServer(async function (req, res) {
 
   if (req.url.startsWith('/generateImage')) {
     await dashboardManager.generateImage(key);
+
+    // Somehow the file is not fully written at this point, 
+    // so manually wait a little to be safe
+    await delay(2000); 
+
     req.url = '/image.bmp';
   }
 
@@ -104,3 +109,7 @@ process.on('SIGINT', function() {
     process.exit(0);
   });
 });
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
