@@ -71,7 +71,7 @@ module.exports = {
                 logger.info('Job run completed', new Date().toLocaleString());
             }, {
                 name: 'Daily dashboard generation for ' + key,
-                runOnInit: false, 
+                runOnInit: true, 
                 timezone: timezone
             });
         });
