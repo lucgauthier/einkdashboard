@@ -61,12 +61,12 @@ module.exports = {
             const timezone = dashboardSettings.timezone || 'America/Toronto'; // Default timezone
 
             cron.schedule(cronTime, async () => {
-                logger.info('Job run started', new Date().toLocaleString());
+                logger.info('Job run started ' + new Date().toLocaleString());
 
                 await generatePage(key);
                 await generateImage(key);
 
-                logger.info('Job run completed', new Date().toLocaleString());
+                logger.info('Job run completed ' + new Date().toLocaleString());
             }, {
                 name: 'Daily dashboard generation for ' + key,
                 runOnInit: true, 
