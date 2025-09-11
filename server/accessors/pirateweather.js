@@ -25,6 +25,7 @@ async function getApiResult(date, coord) {
     }
     
     logger.info('Weather API data retrieved from pirateweather.net');
+    logger.info(JSON.stringify(response.data));
     
     const data = response.data;
     cache.put(url, data, apiCacheDurationMs);
