@@ -77,7 +77,6 @@ const server = http.createServer(async function (req, res) {
 
   if (req.url.startsWith('/device')) {
     // return sleep time to next update
-    //logger.info('Received from device', req.da);
     const seconds = dashboardManager.getSleepTime(key);
     logger.info('<--- %s %d', req.url, seconds);
     res.end('' + seconds);

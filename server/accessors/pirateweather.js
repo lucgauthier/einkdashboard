@@ -25,7 +25,6 @@ async function getApiResult(date, coord) {
     }
     
     logger.info('Weather API data retrieved from pirateweather.net');
-    logger.info(JSON.stringify(response.data));
     
     const data = response.data;
     cache.put(url, data, apiCacheDurationMs);
@@ -52,7 +51,7 @@ function convertDailyWeather(daily) {
 
 async function getWeather(date, coord, amHour, pmHour) {
     const result = await getApiResult(date, coord);
-    logger.info(JSON.stringify({ date, coord, amHour, pmHour }));
+    
     const weather = {
         today: {
             am: null,
