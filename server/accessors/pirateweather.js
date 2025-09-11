@@ -52,7 +52,7 @@ function convertDailyWeather(daily) {
 
 async function getWeather(date, coord, amHour, pmHour) {
     const result = await getApiResult(date, coord);
-    
+    logger.info(JSON.stringify({ date, coor, amHour, pmHour }));
     const weather = {
         today: {
             am: null,
