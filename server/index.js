@@ -1,3 +1,5 @@
+process.env.TZ = 'America/Montreal'; // Set server timezone to Montreal time
+
 const static = require('node-static');
 const http = require('http');
 const path = require('path');
