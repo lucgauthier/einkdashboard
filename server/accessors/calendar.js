@@ -12,15 +12,15 @@ function getCalendar(date) {
 
     // past
     for (var i=pastDays; i>0; i--) {
-        days.push({ past: true, today: false, future: false, date: addDays(date, -1 * i) });
+        days.push({ past: true, today: false, future: false, date: addDays(date, -1 * i), weekDay: getWeekDay(addDays(date, -1 * i)) });
     }
 
     // present
-    days.push({ past: false, today: true, future: false, date: date });
+    days.push({ past: false, today: true, future: false, date: date, weekDay: weekDay });
 
     // future
     for (var i=1; i<=futureDays; i++) {
-        days.push({ past: false, today: false, future: true, date: addDays(date, i) });
+        days.push({ past: false, today: false, future: true, date: addDays(date, i), weekDay: getWeekDay(addDays(date, i)) });
     }
 
     // split days in weeks
