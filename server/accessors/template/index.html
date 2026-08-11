@@ -30,15 +30,16 @@
               display: flex;
               flex-direction: row;
               justify-content: space-between;
-              padding-left:15px;
+              padding-left:10px;
+              padding-right:5px;
             }
             .weekDay {
-              text-align: center;
+              text-align: left;
               width:100%;
               font-size:20px;
               padding-bottom:5px;
               padding-top:5px;
-              margin-right:15px;
+              margin-right:5px;
             }
             .weekDay.we {
               background-color:#ddd;
@@ -47,29 +48,28 @@
               display: flex;
               flex-direction: row;
               justify-content: space-between;
-              padding-left:15px;
+              padding-left:10px;
+              padding-right:5px;
             }
             .day {
               border:2px solid #000;
               width:100%;
-              height:150px;
-              margin-right:15px;
-              margin-bottom:15px;
+              min-width:0;
+              height:222px;
+              box-sizing:border-box;
+              overflow:hidden;
+              margin-right:5px;
+              margin-bottom:10px;
               padding:6px 10px;
               font-family: Roboto;
               text-align:center;
 
               display:flex;
               flex-direction: column;
-              justify-content: space-between;
               background-color:#fff;
               background-repeat: no-repeat;
-              background-position: 50% 50%;
+              background-position: 50% 25%;
               background-size: 100px 100px;
-            }
-            .day .d {
-              font-size:20px;
-              color:#888;
             }
             .day.past {
               background: repeating-linear-gradient(
@@ -114,12 +114,21 @@
             .day .details {
               font-size: 15px;
               line-height: 1;
-              text-align: center;
-              margin-bottom:-67px;
-              height:16px;
-              overflow-y: hidden;
-              text-overflow: ellipsis;
+              text-align: left;
+              max-height:2em;
+              width:100%;
+              min-width:0;
+              overflow:hidden;
               background-color: #fff;
+              display:-webkit-box;
+              -webkit-box-orient:vertical;
+              -webkit-line-clamp:2;
+              line-clamp:2;
+            }
+            .day .events {
+              min-height:0;
+              margin-top:80px;
+              overflow:hidden;
             }
             .day .quote {
               font-size:30px;
@@ -133,8 +142,7 @@
               display: flex;
               flex-direction: row;
               justify-content: space-between;
-              height:380px;
-              border-bottom:4px solid #000;
+              height:260px;
               padding-left:15px;
             }
             .t {
@@ -220,7 +228,7 @@
               position:absolute;
               background-color:#fff;
               width:1200px;
-              height:380px;
+              height:260px;
               top:0;
               left:0;
               z-index:1;
@@ -280,11 +288,22 @@
 
         <div id="row3">
           
+          <div class="top" style="background-color: #000; color:#fff">
+          {{#each weekDays}}
+            <div class="weekDay">{{ weekDayLong weekDay }}</div>
+          {{/each}}
+          </div>
+
           {{#each weeks}}
 
             <div class="top">
-              {{#each ../weekDays}}
-                <div class="weekDay {{#if weekend }}we{{/if}}">{{ weekDayInitial weekDay }}</div>
+              {{#each this }}
+                <div class="weekDay {{#if weekend }}we{{/if}}">
+                  {{ date.day }}
+                  {{#isFirst date.day }}
+                      {{ monthLong date.month }}
+                    {{/isFirst}}
+                </div>
               {{/each}}
             </div>
             
@@ -319,16 +338,6 @@
                       {{#unless weather}}
                       <div style="height:40px">&nbsp;</div>
                       {{/unless}}
-                    <!-- {{#if events}}
-                      <div class="quote">
-                        {{#each events}}
-                          <span>{{ title }}</span>
-                        {{/each}}
-                      </div>
-                    {{/if}}
-                    {{#unless events}}
-                      <div class="quote">{{ ../../todayQuote }}</div>
-                    {{/unless}} -->
                   {{/if}}
                   {{#if future}}
                     {{#with weather}}
@@ -356,18 +365,12 @@
                     {{/unless}}
                   {{/if}}
                   {{#if events}}
-                  <span class="details">
+                  <div class="events">
                     {{#each events}}
-                      {{ title }}
+                      <div class="details">{{#if start}}{{formatTime start}}-{{formatTime end}} {{/if}}{{title}}</div>
                     {{/each}}
-                  </span>
+                  </div>
                   {{/if}}
-                  <span class="d">
-                    {{ date.day }}
-                    {{#isFirst date.day }}
-                      {{ monthLong date.month }}
-                    {{/isFirst}}
-                  </span>
                 </div>
               {{/each}}
             </div>
@@ -382,7 +385,7 @@ var showYprecip = false;
 
 // set the dimensions and margins of the graph
 var width = 1200,
-    height = 380;
+    height = 260;
 
 // get the data
 var data = {{ json hourly }};
@@ -423,7 +426,7 @@ function AreaChart(data, {
   y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
   defined, // given d in data, returns true if defined (for gaps)
   curve = d3.curveNatural, // method of interpolation between points
-  marginTop = 180, // top margin, in pixels
+  marginTop = 160, // top margin, in pixels
   marginRight = -10, // right margin, in pixels
   marginBottom = 20, // bottom margin, in pixels
   marginLeft = -10, // left margin, in pixels
@@ -492,7 +495,7 @@ function AreaChart(data, {
       .attr("d", area(I));
 
   // draw dots and legends at 8:00 and 14:00
-  var bigHours = I.filter((_, i) => X[i] === amHour || X[i] === pmHour);
+  /*var bigHours = I.filter((_, i) => X[i] === amHour || X[i] === pmHour);
   svg.selectAll('circle')
     .data(bigHours)
     .join('circle')
@@ -511,7 +514,8 @@ function AreaChart(data, {
       .attr("x", i => xScale(X[i]))
       .attr("y", marginTop + 15)
       .text(i => `${X[i]}h`); // `${X[i]}h` ... X[i] == amHour ? 'AM' : 'PM'
-
+  */
+ 
 	// x axis
   svg.append("g")
       .attr("transform", `translate(0,${height - marginBottom})`)

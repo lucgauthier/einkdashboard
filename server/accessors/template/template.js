@@ -49,6 +49,9 @@ handlebars.registerHelper('monthLong', function(month) {
     ];
     return values[month - 1];
 });
+handlebars.registerHelper('formatTime', function(date) {
+    return `${date.hours}h${date.minutes ? String(date.minutes).padStart(2, '0') : ''}`;
+});
 handlebars.registerHelper('isFirst', function(day, options) {
     return day == 1 ? options.fn(this) : options.inverse(this);
 });
