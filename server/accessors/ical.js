@@ -34,10 +34,17 @@ async function getEvents(icalUrl) {
         if (apiEvents.hasOwnProperty(k)) {
             const ev = apiEvents[k];
             if (ev.type == 'VEVENT') {
-                events.push({
+                const event = {
                     date: datetime.jsDateToDate(ev.start),
                     title: ev.summary
-                });
+                };
+
+                if (ev.datetype === 'date-time') {
+                    event.start = datetime.jsDateToDate(ev.start);
+                    event.end = datetime.jsDateToDate(ev.end);
+                }
+                
+                events.push(event);
             }
         }
     }

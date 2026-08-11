@@ -17,7 +17,7 @@ function dateEquals(a, b) {
 }
 
 function jsDateToDate(jsDate) {
-    return { year: jsDate.getFullYear(), month: jsDate.getMonth() + 1, day: jsDate.getDate(), hours: jsDate.getHours() };
+    return { year: jsDate.getFullYear(), month: jsDate.getMonth() + 1, day: jsDate.getDate(), hours: jsDate.getHours(), minutes: jsDate.getMinutes() };
 }
 
 function getSecondsToMidnight() {
