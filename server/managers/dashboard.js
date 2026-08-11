@@ -117,11 +117,32 @@ async function getTemplateData(calendarAccessor, weatherAccessor, icalAccessor, 
         week.forEach(day => {
             const w = weather.days.find(weather => datetime.dateEquals(weather.date, day.date));
             day.weather = w ? w.weather : null;
-            day.events = events.filter(e => datetime.dateEquals(e.date, day.date));
+            day.events = events
+                .filter(e => datetime.dateEquals(e.date, day.date))
+                .sort(compareEvents);
         });
     });
 
     return data;
+}
+
+function compareEvents(a, b) {
+    const aIsFullDay = !a.start;
+    const bIsFullDay = !b.start;
+
+    if (aIsFullDay !== bIsFullDay) {
+        return aIsFullDay ? -1 : 1;
+    }
+
+    if (aIsFullDay) {
+        return 0;
+    }
+
+    return compareTimes(a.start, b.start) || compareTimes(a.end, b.end);
+}
+
+function compareTimes(a, b) {
+    return (a.hours - b.hours) || (a.minutes - b.minutes);
 }
 
 // After 8 AM, return tomorrow. Otherwise, return today.
