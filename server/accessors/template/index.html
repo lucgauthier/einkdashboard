@@ -34,7 +34,7 @@
               padding-right:5px;
             }
             .weekDay {
-              text-align: left;
+              text-align: center;
               width:100%;
               font-size:20px;
               padding-bottom:5px;
@@ -269,7 +269,7 @@
 
             <div class="time">
               <div class="weekDay">{{ weekDayLong weekDay }}</div>
-              <div class="date"><span class="d">{{ date.day }}</span><span>{{ monthLong date.month }}</span></div>
+              <div class="date" style="-webkit-text-stroke: 4px #fff; paint-order: stroke fill;"><span class="d">{{ date.day }}</span><span>{{ monthLong date.month }}</span></div>
             </div>
 
           </div>
@@ -411,7 +411,7 @@ var tempChart = AreaChart(data, {
 
 var precipChart = BarChart(data, {
   x: d => d.hour,
-  y: d => d.pop >= 0.4 ? d.precip : 0,
+  y: d => d.pop >= 0.3 ? d.precip : 0,
   width: width,
   height: height,
   color: "black",
@@ -528,10 +528,10 @@ function BarChart(data, {
   x = (d, i) => i, // given d in data, returns the (ordinal) x-value
   y = d => d, // given d in data, returns the (quantitative) y-value
   title, // given d in data, returns the title text
-  marginTop = 220, // top margin, in pixels
-  marginRight = 0, // right margin, in pixels
-  marginBottom = 40, // bottom margin, in pixels
-  marginLeft = 30, // left margin, in pixels
+  marginTop = 180, // top margin, in pixels
+  marginRight = -10, // right margin, in pixels
+  marginBottom = 20, // bottom margin, in pixels
+  marginLeft = -10, // left margin, in pixels
   width = 640, // the outer width of the chart, in pixels
   height = 400, // the outer height of the chart, in pixels
   xDomain, // an array of (ordinal) x-values
