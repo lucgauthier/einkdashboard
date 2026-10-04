@@ -21,7 +21,7 @@ async function getApiEvents(icalUrl) {
     return events;
 }
 
-async function getEvents(icalUrl) {
+async function getEvents(icalUrl, dateFrom, dateTo) {
     const events = [];
 
     if (!icalUrl) {
@@ -44,12 +44,30 @@ async function getEvents(icalUrl) {
                     event.end = datetime.jsDateToDate(ev.end);
                 }
                 
-                events.push(event);
+                if (isWithinDateRange(event.date, dateFrom, dateTo)) {
+                    events.push(event);
+                }
             }
         }
     }
 
     return events;
+}
+
+function isWithinDateRange(date, dateFrom, dateTo) {
+    if (dateFrom && compareDates(date, dateFrom) < 0) {
+        return false;
+    }
+
+    if (dateTo && compareDates(date, dateTo) > 0) {
+        return false;
+    }
+
+    return true;
+}
+
+function compareDates(a, b) {
+    return (a.year - b.year) || (a.month - b.month) || (a.day - b.day);
 }
 
 module.exports = getEvents;

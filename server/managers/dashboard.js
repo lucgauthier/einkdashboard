@@ -100,7 +100,9 @@ async function getTemplateData(calendarAccessor, weatherAccessor, icalAccessor, 
     // Fetch data
     const weather = await weatherAccessor(dashboardDate, dashboardCoord, settings.weather_am, settings.weather_pm);
     const calendar = calendarAccessor(dashboardDate);
-    const events = await icalAccessor(settings.ical_url);
+    const dateFrom = calendar.weeks[0][0].date;
+    const dateTo = calendar.weeks[calendar.weeks.length - 1][calendar.weeks[0].length - 1].date;
+    const events = await icalAccessor(settings.ical_url, dateFrom, dateTo);
 
     // Transform to final template data
     const data = calendar;
