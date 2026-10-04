@@ -34,24 +34,60 @@ async function getEvents(icalUrl, dateFrom, dateTo) {
         if (apiEvents.hasOwnProperty(k)) {
             const ev = apiEvents[k];
             if (ev.type == 'VEVENT') {
-                const event = {
-                    date: datetime.jsDateToDate(ev.start),
-                    title: ev.summary
-                };
+                getEventOccurrences(ev, dateFrom, dateTo).forEach(occurrence => {
+                    const event = {
+                        date: datetime.jsDateToDate(occurrence.start),
+                        title: occurrence.summary
+                    };
 
-                if (ev.datetype === 'date-time') {
-                    event.start = datetime.jsDateToDate(ev.start);
-                    event.end = datetime.jsDateToDate(ev.end);
-                }
-                
-                if (isWithinDateRange(event.date, dateFrom, dateTo)) {
-                    events.push(event);
-                }
+                    if (occurrence.datetype === 'date-time') {
+                        event.start = datetime.jsDateToDate(occurrence.start);
+                        event.end = datetime.jsDateToDate(occurrence.end);
+                    }
+
+                    if (isWithinDateRange(event.date, dateFrom, dateTo)) {
+                        events.push(event);
+                    }
+                });
             }
         }
     }
 
     return events;
+}
+
+function getEventOccurrences(event, dateFrom, dateTo) {
+    if (!event.rrule || !dateFrom || !dateTo) {
+        return [event];
+    }
+
+    const rangeStart = new Date(dateFrom.year, dateFrom.month - 1, dateFrom.day);
+    const rangeEnd = new Date(dateTo.year, dateTo.month - 1, dateTo.day, 23, 59, 59, 999);
+    const duration = event.end.getTime() - event.start.getTime();
+
+    return event.rrule.between(rangeStart, rangeEnd, true)
+        .filter(start => !isExcludedOccurrence(event, start))
+        .map(start => getOccurrenceEvent(event, start, duration));
+}
+
+function isExcludedOccurrence(event, start) {
+    const recurrenceKey = start.toISOString().slice(0, 10);
+    return event.exdate && event.exdate[recurrenceKey] && !event.recurrences?.[recurrenceKey];
+}
+
+function getOccurrenceEvent(event, start, duration) {
+    const recurrenceKey = start.toISOString().slice(0, 10);
+    const override = event.recurrences?.[recurrenceKey];
+
+    if (override) {
+        return override;
+    }
+
+    return {
+        ...event,
+        start: start,
+        end: new Date(start.getTime() + duration)
+    };
 }
 
 function isWithinDateRange(date, dateFrom, dateTo) {
